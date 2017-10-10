@@ -1,5 +1,4 @@
 ![supported python versions](python-2.7%203.4%203.5%203.6-blue.svg)
-![Image of Yaktocat](https://octodex.github.com/images/yaktocat.png)
 # gcreds
 
 Inspired by [credstash](https://github.com/fugue/credstash),  I ended up putting datastore and [Google Cloud KMS (CLOUD KEY MANAGEMENT SERVICE)](https://cloud.google.com/kms/) together to make `gcreds` to manage credentials in google cloud.
