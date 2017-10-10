@@ -15,6 +15,17 @@ with open("{name}.py".format(name=name), encoding='utf-8') as f:
 with open('README.rst', encoding='utf-8') as f:
   long_description = f.read()
 
+install_requires = [
+    'google-api-python-client',
+    'google-cloud-datastore',
+    'google-auth-httplib2'
+]
+
+with open('req.txt', 'wb') as f:
+  for i in install_requires:
+    f.write(i)
+    f.write('\n')
+
 
 setup(
     name=name,
@@ -25,12 +36,7 @@ setup(
     author_email='tly1980@gmail.com',
     url='http://github.com/tly1980/{name}'.format(name=name),
     py_modules=[name],
-    package_data={'': ['req.txt']},
-    install_requires=[
-        'google-api-python-client',
-        'google-cloud-datastore',
-        'google-auth-httplib2'
-    ],
+    install_requires=install_requires,
     license="MIT",
     classifiers=[ # https://pypi.python.org/pypi?:action=list_classifiers
         'Development Status :: 4 - Beta',
