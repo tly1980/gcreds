@@ -17,8 +17,8 @@ def check_output(*arg, **kwargs):
 
 def test_a():
   secret = str(uuid.uuid4())
-  subprocess.call('gcreds put test_a %s' % secret, cwd=DIR_PATH, shell=True)
-  secret_get = check_output('gcreds get test_a', cwd=DIR_PATH, shell=True)
+  subprocess.call('gcreds.py put test_a %s' % secret, cwd=DIR_PATH, shell=True)
+  secret_get = check_output('gcreds.py get test_a', cwd=DIR_PATH, shell=True)
   assert secret_get.strip() == secret
 
 
@@ -29,6 +29,6 @@ def test_b():
     f.write(json.dumps(d).encode('utf8'))
     f.flush()
 
-    subprocess.call('gcreds put test_b < %s' % f.name, cwd=DIR_PATH, shell=True)
-    secret_get = check_output('gcreds get test_b', cwd=DIR_PATH, shell=True)
+    subprocess.call('gcreds.py put test_b < %s' % f.name, cwd=DIR_PATH, shell=True)
+    secret_get = check_output('gcreds.py get test_b', cwd=DIR_PATH, shell=True)
     assert secret_get.strip() == json.dumps(d)
