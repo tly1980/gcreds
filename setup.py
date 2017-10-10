@@ -23,8 +23,7 @@ install_requires = [
 
 with open('req.txt', 'wb') as f:
   for i in install_requires:
-    f.write(i)
-    f.write('\n')
+    f.write((i + '\n').encode('utf8'))
 
 
 setup(
@@ -36,6 +35,7 @@ setup(
     author_email='tly1980@gmail.com',
     url='http://github.com/tly1980/{name}'.format(name=name),
     py_modules=[name],
+    scripts=['bin/gcreds'],
     install_requires=install_requires,
     license="MIT",
     classifiers=[ # https://pypi.python.org/pypi?:action=list_classifiers
@@ -52,5 +52,6 @@ setup(
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
     ],
 )
