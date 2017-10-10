@@ -1,8 +1,12 @@
 # gcreds
 
-Inspired by [credstash](https://github.com/fugue/credstash),  I ended up putting datastore and KMS together to make `gcreds` to manage credentials in google cloud.
+Inspired by [credstash](https://github.com/fugue/credstash),  I ended up putting datastore and [Google Cloud KMS (CLOUD KEY MANAGEMENT SERVICE)](https://cloud.google.com/kms/) together to make `gcreds` to manage credentials in google cloud.
 
 `gcreds` allows you store (put) and access (get) your credential in google cloud, and help to reduce security hole like keeping secrets being stored from your source code control.
+
+## Installation
+
+Just run: `pip install gcreds` .
 
 ## Getting started
 

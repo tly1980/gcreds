@@ -13,5 +13,5 @@ test:
 tox:
 	tox -v
 
-pypi:
-	python setup.py bdist_wheel upload -r pypi
+pypi: README.rst
+	python setup.py bdist_wheel --universal upload -r pypi
