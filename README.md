@@ -6,7 +6,11 @@ Inspired by [credstash](https://github.com/fugue/credstash),  I ended up putting
 
 ## Installation
 
-Just run: `pip install gcreds` .
+Just run:
+
+```
+pip install gcreds
+```
 
 ## Getting started
 
