@@ -5,9 +5,12 @@ import base64
 import io
 import sys
 
-
 from google.cloud import datastore
 import googleapiclient.discovery
+import six
+
+
+__version__ = '0.1'
 
 
 AP = argparse.ArgumentParser()
@@ -40,10 +43,10 @@ def encrypt(project_id, location_id, key_ring_id, crypto_key_id, plaintext):
   crypto_keys = kms_client.projects().locations().keyRings().cryptoKeys()
   request = crypto_keys.encrypt(
       name=name,
-      body={'plaintext': base64.b64encode(plaintext).decode('ascii')}
+      body={'plaintext': base64.b64encode(plaintext.encode('utf8')).decode('utf8')}
   )
   response = request.execute()
-  return response['ciphertext'].encode('ascii')
+  return response['ciphertext'].encode('utf8')
 
 
 def decrypt(project_id, location_id, key_ring_id, crypto_key_id, ciphertext_b64):
@@ -59,11 +62,19 @@ def decrypt(project_id, location_id, key_ring_id, crypto_key_id, ciphertext_b64)
 
   # Use the KMS API to decrypt the data.
   crypto_keys = kms_client.projects().locations().keyRings().cryptoKeys()
+  if six.PY3:
+    ciphertext_b64 = ciphertext_b64.decode('utf8')
+
   request = crypto_keys.decrypt(
       name=name,
       body={'ciphertext': ciphertext_b64})
   response = request.execute()
-  return base64.b64decode(response['plaintext'].encode('ascii'))
+  ret = base64.b64decode(response['plaintext'].encode('utf8'))
+
+  if six.PY3:
+    ret = ret.decode('utf8')
+
+  return ret
 
 
 def put(project_id, location_id, key_ring_id, crypto_key_id, name, plaintext):
@@ -88,7 +99,9 @@ def main(args):
   if not project_id:
     client = datastore.Client()
     project_id = client.project
-    print('project_id is not provided, will use default project: [%s] instead.' % project_id)
+    print(
+        'project_id is not provided, will use default project: [%s] instead.'
+        % project_id, file=sys.stderr)
 
   if args.action == 'put':
     plaintext = sys.stdin.read() if not args.plaintext else args.plaintext
