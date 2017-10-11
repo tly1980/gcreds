@@ -51,7 +51,7 @@ And Let's use the redirect to enter the password
 
 ```
 $ gcreds put mysecret < a_super_password.txt
-project_id is not provided, will use default project: [tom-finance] instead.
+project_id is not provided, will use default project: [your-default-gcloud-project] instead.
 
 ```
 
@@ -59,7 +59,7 @@ Let's retrive the password
 
 ```
 $ gcreds get mysecret
-project_id is not provided, will use default project: [tom-finance] instead.
+project_id is not provided, will use default project: [your-default-gcloud-project] instead.
 Y#7U*ubwZh=D^XEq3a_MMyX3NVL_gfk9K4eq2HX
 ```
 
