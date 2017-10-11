@@ -1,8 +1,8 @@
 DEV_ENV := py27
 PY_IMG:=$(shell python2 -c "import urllib, setup; print urllib.quote('python-{}-blue.svg'.format(' '.join(setup.PY_VERSIONS)))")
 
-README.md: _README.md
-	echo "![supported python versions]($(PY_IMG))" > README.md
+README.md: _README.md Makefile
+	echo "![supported python versions](https://img.shields.io/badge/$(PY_IMG))" > README.md
 	cat _README.md >> README.md
 
 README.rst: README.md

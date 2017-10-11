@@ -1,4 +1,4 @@
-![supported python versions](python-2.7%203.4%203.5%203.6-blue.svg)
+![supported python versions](https://img.shields.io/badge/python-2.7%203.4%203.5%203.6-blue.svg)
 # gcreds
 
 Inspired by [credstash](https://github.com/fugue/credstash),  I ended up putting datastore and [Google Cloud KMS (CLOUD KEY MANAGEMENT SERVICE)](https://cloud.google.com/kms/) together to make `gcreds` to manage credentials in google cloud.
