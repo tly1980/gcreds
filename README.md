@@ -28,14 +28,14 @@ Once you have it setup, let's try to put some credential.
 Storing the password:
 
 ```
-$ ./gcreds.py put mysecret SxtlB5fBvvAKT7P4
+$ gcreds put mysecret SxtlB5fBvvAKT7P4
 project_id is not provided, will use default project: [your-default-gcloud-project] instead.
 ```
 
 Retriving the password:
 
 ```
-$ ./gcreds.py get mysecret
+$ gcreds get mysecret
 project_id is not provided, will use default project: [your-default-gcloud-project] instead.
 SxtlB5fBvvAKT7P4
 ```
@@ -52,7 +52,7 @@ Y#7U*ubwZh=D^XEq3a_MMyX3NVL_gfk9K4eq2HX
 And Let's use the redirect to enter the password
 
 ```
-$ ./gcreds.py put mysecret < a_super_password.txt
+$ gcreds put mysecret < a_super_password.txt
 project_id is not provided, will use default project: [tom-finance] instead.
 
 ```
@@ -60,7 +60,7 @@ project_id is not provided, will use default project: [tom-finance] instead.
 Let's retrive the password
 
 ```
-$ ./gcreds.py get mysecret
+$ gcreds get mysecret
 project_id is not provided, will use default project: [tom-finance] instead.
 Y#7U*ubwZh=D^XEq3a_MMyX3NVL_gfk9K4eq2HX
 ```
