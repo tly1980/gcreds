@@ -19,7 +19,7 @@ AP.add_argument('--crypto_key_id', default='gcreds', type=str, help='KMS CryptoK
 AP.add_argument('--location_id', default='global', type=str, help='KMS Location ID')
 AP.add_argument('--project_id', default=None, type=str, help='Project ID')
 AP.add_argument('action', type=str, help='Action. Put / Get')
-AP.add_argument('name', type=str, help='The name of credential.')
+AP.add_argument('name', type=str, nargs='?', help='The name of credential.')
 AP.add_argument('plaintext', type=str, nargs='?', help='To be encrypted.')
 
 
@@ -77,6 +77,14 @@ def decrypt(project_id, location_id, key_ring_id, crypto_key_id, ciphertext_b64)
   return ret
 
 
+def get_project_id(project_id):
+  if not project_id:
+    client = datastore.Client()
+    project_id = client.project
+
+  return project_id
+
+
 def put(project_id, location_id, key_ring_id, crypto_key_id, name, plaintext):
   datastore_client = datastore.Client(project=project_id, namespace='gcreds')
   key = datastore_client.key(KEY_KIND, name)
@@ -94,11 +102,14 @@ def get(project_id, location_id, key_ring_id, crypto_key_id, name):
   return decrypt(project_id, location_id, key_ring_id, crypto_key_id, encrypted)
 
 
+def list_creds(project_id):
+  datastore_client = datastore.Client(project=project_id, namespace='gcreds')
+  return [c.key.name for c in datastore_client.query(kind=KEY_KIND).fetch()]
+
+
 def main(args):
-  project_id = args.project_id
-  if not project_id:
-    client = datastore.Client()
-    project_id = client.project
+  project_id = get_project_id(args.project_id)
+  if not args.project_id:
     print(
         'project_id is not provided, will use default project: [%s] instead.'
         % project_id, file=sys.stderr)
@@ -111,13 +122,18 @@ def main(args):
 
     put(project_id, args.location_id, args.key_ring_id, args.crypto_key_id,
         args.name, plaintext)
-  else:
+  elif args.action == 'get':
     print(
         get(
             project_id, args.location_id, args.key_ring_id,
             args.crypto_key_id, args.name
         )
     )
+  elif args.action == 'list':
+    print('You have following credentials:')
+    for n in sorted(list_creds(project_id)):
+      print('  %s' % n)
+
 
 if __name__ == '__main__':
   main(AP.parse_args())
