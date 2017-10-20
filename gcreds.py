@@ -12,11 +12,20 @@ import six
 
 __version__ = '0.1.7'
 
+DEFAULT_KEY_RING_ID = 'gcreds'
+DEFAULT_CRYPTO_KEY_ID = 'gcreds'
+DEFAULT_LOCATION_ID = 'global'
 
 AP = argparse.ArgumentParser()
-AP.add_argument('--key_ring_id', default='gcreds', type=str, help='KMS KeyRing Id')
-AP.add_argument('--crypto_key_id', default='gcreds', type=str, help='KMS CryptoKey Id')
-AP.add_argument('--location_id', default='global', type=str, help='KMS Location ID')
+AP.add_argument(
+    '--key_ring_id',
+    default=DEFAULT_KEY_RING_ID, type=str, help='KMS KeyRing Id')
+AP.add_argument(
+    '--crypto_key_id',
+    default=DEFAULT_CRYPTO_KEY_ID, type=str, help='KMS CryptoKey Id')
+AP.add_argument(
+    '--location_id',
+    default=DEFAULT_LOCATION_ID, type=str, help='KMS Location ID')
 AP.add_argument('--project_id', default=None, type=str, help='Project ID')
 AP.add_argument('action', type=str, help='Action. Put / Get')
 AP.add_argument('name', type=str, nargs='?', help='The name of credential.')
@@ -77,7 +86,7 @@ def decrypt(project_id, location_id, key_ring_id, crypto_key_id, ciphertext_b64)
   return ret
 
 
-def get_project_id(project_id):
+def get_current_project_id(project_id):
   if not project_id:
     client = datastore.Client()
     project_id = client.project
@@ -85,7 +94,9 @@ def get_project_id(project_id):
   return project_id
 
 
-def put(project_id, location_id, key_ring_id, crypto_key_id, name, plaintext):
+def put(project_id, name, plaintext,
+        location_id=DEFAULT_LOCATION_ID,
+        key_ring_id=DEFAULT_KEY_RING_ID, crypto_key_id=DEFAULT_CRYPTO_KEY_ID):
   datastore_client = datastore.Client(project=project_id, namespace='gcreds')
   key = datastore_client.key(KEY_KIND, name)
   creds = datastore.Entity(key=key, exclude_from_indexes=['content'])
@@ -94,7 +105,9 @@ def put(project_id, location_id, key_ring_id, crypto_key_id, name, plaintext):
   datastore_client.put(creds)
 
 
-def get(project_id, location_id, key_ring_id, crypto_key_id, name):
+def get(project_id, name,
+        location_id=DEFAULT_LOCATION_ID,
+        key_ring_id=DEFAULT_KEY_RING_ID, crypto_key_id=DEFAULT_CRYPTO_KEY_ID):
   datastore_client = datastore.Client(project=project_id, namespace='gcreds')
   key = datastore_client.key(KEY_KIND, name)
   entity = datastore_client.get(key)
@@ -108,7 +121,7 @@ def list_creds(project_id):
 
 
 def main(args):
-  project_id = get_project_id(args.project_id)
+  project_id = get_current_project_id(args.project_id)
   if not args.project_id:
     print(
         'project_id is not provided, will use default project: [%s] instead.'
@@ -120,13 +133,16 @@ def main(args):
     if not plaintext:
       sys.exit('Please provide a text to be encrypted.')
 
-    put(project_id, args.location_id, args.key_ring_id, args.crypto_key_id,
-        args.name, plaintext)
+    put(project_id, args.name, plaintext,
+        location_id=args.location_id,
+        key_ring_id=args.key_ring_id,
+        crypto_key_id=args.crypto_key_id)
   elif args.action == 'get':
     print(
         get(
-            project_id, args.location_id, args.key_ring_id,
-            args.crypto_key_id, args.name
+            project_id, args.name,
+            location_id=args.location_id, key_ring_id=args.key_ring_id,
+            crypto_key_id=args.crypto_key_id
         )
     )
   elif args.action == 'list':
