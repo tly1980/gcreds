@@ -10,7 +10,7 @@ import googleapiclient.discovery
 import six
 
 
-__version__ = '0.1.6'
+__version__ = '0.1.7'
 
 
 AP = argparse.ArgumentParser()
