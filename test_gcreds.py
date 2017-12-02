@@ -4,6 +4,7 @@ import os
 import tempfile
 import json
 
+import pytest
 import six
 
 
@@ -32,3 +33,14 @@ def test_b():
     subprocess.call('gcreds put test_b < %s' % f.name, cwd=DIR_PATH, shell=True)
     secret_get = check_output('gcreds get test_b', cwd=DIR_PATH, shell=True)
     assert secret_get.strip() == json.dumps(d)
+
+
+def test_c():
+  secret = str(uuid.uuid4())
+  with pytest.raises(subprocess.CalledProcessError) as ex:
+    secret_get = check_output(
+        'gcreds get test_not_set', stderr=subprocess.STDOUT,
+        cwd=DIR_PATH, shell=True)
+
+  assert ex.value.returncode == 1
+  assert 'test_not_set is not set.' in ex.value.output.strip()

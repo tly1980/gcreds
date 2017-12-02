@@ -10,7 +10,7 @@ import googleapiclient.discovery
 import six
 
 
-__version__ = '0.1.8'
+__version__ = '0.1.9'
 
 DEFAULT_KEY_RING_ID = 'gcreds'
 DEFAULT_CRYPTO_KEY_ID = 'gcreds'
@@ -110,7 +110,11 @@ def get(project_id, name,
         key_ring_id=DEFAULT_KEY_RING_ID, crypto_key_id=DEFAULT_CRYPTO_KEY_ID):
   datastore_client = datastore.Client(project=project_id, namespace='gcreds')
   key = datastore_client.key(KEY_KIND, name)
+
   entity = datastore_client.get(key)
+  if not entity:
+    return None
+
   encrypted = entity['content']
   return decrypt(project_id, location_id, key_ring_id, crypto_key_id, encrypted)
 
@@ -138,13 +142,15 @@ def main(args):
         key_ring_id=args.key_ring_id,
         crypto_key_id=args.crypto_key_id)
   elif args.action == 'get':
-    print(
-        get(
-            project_id, args.name,
-            location_id=args.location_id, key_ring_id=args.key_ring_id,
-            crypto_key_id=args.crypto_key_id
-        )
+    secret = get(
+        project_id, args.name, location_id=args.location_id,
+        key_ring_id=args.key_ring_id, crypto_key_id=args.crypto_key_id
     )
+    if secret:
+      print(secret)
+    else:
+      print('%s is not set.' % args.name, file=sys.stderr)
+      sys.exit(1)
   elif args.action == 'list':
     print('You have following credentials:')
     for n in sorted(list_creds(project_id)):
