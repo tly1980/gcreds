@@ -43,4 +43,8 @@ def test_c():
         cwd=DIR_PATH, shell=True)
 
   assert ex.value.returncode == 1
-  assert 'test_not_set is not set.' in ex.value.output.strip()
+
+  if six.PY3:
+    assert 'test_not_set is not set.' in ex.value.output.decode('utf-8').strip()
+  else:
+    assert 'test_not_set is not set.' in ex.value.output.strip()
