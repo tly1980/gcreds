@@ -4,17 +4,19 @@ import argparse
 import base64
 import io
 import sys
+import logging
 
 from google.cloud import datastore
 import googleapiclient.discovery
 import six
 
 
-__version__ = '0.2.0'
+__version__ = '0.2.1'
 
 DEFAULT_KEY_RING_ID = 'gcreds'
 DEFAULT_CRYPTO_KEY_ID = 'gcreds'
 DEFAULT_LOCATION_ID = 'global'
+
 
 AP = argparse.ArgumentParser()
 AP.add_argument(
@@ -125,6 +127,9 @@ def list_creds(project_id):
 
 
 def main(args):
+  # to silent the warnning:
+  #    ImportError: file_cache is unavailable when using oauth2client >= 4.0.0
+  logging.getLogger('googleapiclient.discovery_cache').setLevel(logging.ERROR)
   project_id = get_current_project_id(args.project_id)
   if not args.project_id:
     print(
