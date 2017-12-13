@@ -24,8 +24,12 @@ Before you can use it, it will require a little setup work here:
 gcloud kms keyrings create gcreds --location global
 ```
 
-
 2. Under that key ring, create a crypto key named `gcreds`.
+
+```
+gcloud kms keys create gcreds --location global --keyring gcreds --purpose encryption
+```
+
 
 You can customized `location`, `key-ring`, `cryopto-key`.
 
