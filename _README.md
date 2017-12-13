@@ -17,6 +17,12 @@ pip install gcreds
 Before you can use it, it will require a little setup work here:
 
 1. Greate a KMS key ring on `global` location, named it like `gcreds`.
+
+```
+gcloud kms keyrings create gcreds --location global
+```
+
+
 2. Under that key ring, create a crypto key named `gcreds`.
 
 You can customized `location`, `key-ring`, `cryopto-key`.
